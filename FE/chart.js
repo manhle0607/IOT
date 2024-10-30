@@ -1,27 +1,30 @@
+let combinedChart;
+
 async function updateChartData() {
   try {
-      const response = await fetch('http://localhost:3000/sensor_data');
-      const data = await response.json();
+    const response = await fetch('http://localhost:3000/sensor_data');
+    const data = await response.json();
 
-      console.log(data); // In ra để kiểm tra dữ liệu trả về từ API
+    
+    // Lấy 25 bản ghi mới nhất
+    const recentData = data.slice(0,10);
+    console.log(recentData)
 
-      const labels = data.map(item => item.time);
-      const tempData = data.map(item => item.temp);
-      const humidData = data.map(item => item.humid);
-      const lightData = data.map(item => item.light);
+    const labels = recentData.map(item => item.timestamp);
+    const tempData = recentData.map(item => item.temperature);
+    const humidData = recentData.map(item => item.humidity);
+    const lightData = recentData.map(item => item.light);
 
-      combinedChart.data.labels = labels;
-      combinedChart.data.datasets[0].data = lightData;
-      combinedChart.data.datasets[1].data = humidData;
-      combinedChart.data.datasets[2].data = tempData;
+    combinedChart.data.labels = labels;
+    combinedChart.data.datasets[0].data = tempData;
+    combinedChart.data.datasets[1].data = humidData;
+    combinedChart.data.datasets[2].data = lightData;
 
-      combinedChart.update();
+    combinedChart.update();
   } catch (error) {
-      console.error('Error fetching data:', error);
+    console.error('Error fetching data:', error);
   }
 }
-
-let combinedChart;
 
 document.addEventListener('DOMContentLoaded', function () {
   const ctx = document.getElementById('combinedChart').getContext('2d');
@@ -32,36 +35,39 @@ document.addEventListener('DOMContentLoaded', function () {
       labels: [], // Thời gian sẽ được cập nhật từ API
       datasets: [
         {
-          label: 'Light Intensity',
+          label: 'Temperature',
           data: [],
-          borderColor: '#4E73DF',
-          backgroundColor: 'rgba(78, 115, 223, 0.1)',
-          fill: true,
+          borderColor: '#F6C23E',
+          backgroundColor: 'rgba(246, 194, 62, 0.1)',
+          fill: false,
           tension: 0.4,
+          yAxisID: 'y1', // Trục y riêng cho Temperature
           borderWidth: 2,
-          pointBackgroundColor: '#4E73DF',
+          pointBackgroundColor: '#F6C23E',
           pointRadius: 3,
         },
         {
-          label: 'Moisture',
+          label: 'Humidity',
           data: [],
           borderColor: '#1CC88A',
           backgroundColor: 'rgba(28, 200, 138, 0.1)',
-          fill: true,
+          fill: false,
           tension: 0.4,
+          yAxisID: 'y2', // Trục y riêng cho Humidity
           borderWidth: 2,
           pointBackgroundColor: '#1CC88A',
           pointRadius: 3,
         },
         {
-          label: 'Temperature',
+          label: 'Light Intensity',
           data: [],
-          borderColor: '#F6C23E',
-          backgroundColor: 'rgba(246, 194, 62, 0.1)',
-          fill: true,
+          borderColor: '#4E73DF',
+          backgroundColor: 'rgba(78, 115, 223, 0.1)',
+          fill: false,
           tension: 0.4,
+          yAxisID: 'y3', // Trục y riêng cho Light Intensity
           borderWidth: 2,
-          pointBackgroundColor: '#F6C23E',
+          pointBackgroundColor: '#4E73DF',
           pointRadius: 3,
         }
       ]
@@ -99,25 +105,60 @@ document.addEventListener('DOMContentLoaded', function () {
             padding: { top: 10 }
           }
         },
-        y: {
+        y1: {
+          type: 'linear',
+          position: 'left',
           grid: {
             color: 'rgba(234, 236, 244, 1)',
             drawBorder: false,
           },
           title: {
             display: true,
-            text: 'Value',
-            color: '#858796',
-            font: { size: 14, family: "'Nunito', sans-serif" },
-            padding: { left: 10, right: 10 }
+            text: 'Temperature',
+            color: '#F6C23E',
           },
-          ticks: { beginAtZero: true, maxTicksLimit: 5, padding: 10 },
-        }
+          ticks: {
+            beginAtZero: true,
+          }
+        },
+        y2: {
+          type: 'linear',
+          position: 'left',
+          grid: {
+            color: 'rgba(234, 236, 244, 0.5)',
+            drawBorder: false,
+          },
+          title: {
+            display: true,
+            text: 'Humidity',
+            color: '#1CC88A',
+          },
+          ticks: {
+            beginAtZero: true,
+          },
+          offset: true // Tạo khoảng trống giữa các cột
+        },
+        y3: {
+          type: 'linear',
+          position: 'left',
+          grid: {
+            display: false,
+          },
+          title: {
+            display: true,
+            text: 'Light Intensity',
+            color: '#4E73DF',
+          },
+          ticks: {
+            beginAtZero: true,
+          },
+          offset: true
+        },
       }
     }
   });
 
-  // Lấy dữ liệu ngay khi trang tải xong
+  // Gọi hàm để lấy dữ liệu khi trang được tải
   updateChartData();
 
   // Cập nhật dữ liệu mỗi 5 giây
