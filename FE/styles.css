@@ -75,7 +75,7 @@ body {
   display: flex;
   justify-content: space-around;
   margin-bottom: 20px;
-  margin-top: 30px;
+  margin-top: 10px;
 }
 
 .sensor_content div {
