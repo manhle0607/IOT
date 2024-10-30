@@ -59,7 +59,7 @@ app.post('/sensor_data', (req, res) => {
 
 // Lấy lịch sử thiết bị từ bảng `device_history`
 app.get('/device_history', (req, res) => {
-  const query = 'SELECT * FROM device_history ORDER BY timestamp DESC';
+  const query = 'SELECT * FROM device_history ORDER BY timestamp ASC';
   db.query(query, (err, results) => {
     if (err) {
       console.error('Lỗi khi lấy lịch sử thiết bị:', err);
@@ -84,6 +84,72 @@ app.post('/device_history', (req, res) => {
   });
 });
 
+app.get('/sensor_data/search', (req, res) => {
+  const column = req.query.column;
+  const query = req.query.query;
+  
+  // Kiểm tra tên cột để đảm bảo rằng nó an toàn
+  const allowedColumns = ['id', 'temperature', 'humidity', 'light', 'timestamp']; // Các tên cột hợp lệ
+  if (!allowedColumns.includes(column)) {
+    return res.status(400).json({ error: 'Tên cột không hợp lệ' });
+  }
+
+  const sql = `SELECT * FROM sensor_data WHERE \`${column}\` LIKE ? ORDER BY timestamp ASC`;
+
+  db.query(sql, [`%${query}%`], (err, results) => {
+    if (err) {
+      console.error('Lỗi khi tìm kiếm dữ liệu sensor:', err);
+      res.status(500).json({ error: 'Lỗi khi tìm kiếm dữ liệu sensor' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+app.get('/device_history/search', (req, res) => {
+  const column = req.query.column;
+  const query = req.query.query;
+  
+  // Kiểm tra tên cột để đảm bảo rằng nó an toàn
+  const allowedColumns = ['id', 'device', 'action', 'timestamp']; // Các tên cột hợp lệ
+  if (!allowedColumns.includes(column)) {
+    return res.status(400).json({ error: 'Tên cột không hợp lệ' });
+  }
+
+  const sql = `SELECT * FROM device_history WHERE \`${column}\` LIKE ? ORDER BY timestamp DESC LIMIT 10`;
+
+  db.query(sql, [`%${query}%`], (err, results) => {
+    if (err) {
+      console.error('Lỗi khi tìm kiếm dữ liệu history:', err);
+      res.status(500).json({ error: 'Lỗi khi tìm kiếm dữ liệu history' });
+    } else {
+      res.json(results);
+    }
+  });
+});
+
+// cho đèn
+app.post('/toggle-light', (req, res) => {
+  const { device, action } = req.body;
+
+  // Kiểm tra xem action có hợp lệ hay không (ON hoặc OFF)
+  if (action !== "ON" && action !== "OFF") {
+    return res.status(400).json({ error: 'Hành động không hợp lệ' });
+  }
+
+  // Chèn hành động bật/tắt đèn vào bảng `device_history`
+  const query = 'INSERT INTO device_history (device, action, timestamp) VALUES (?, ?, NOW())';
+  db.query(query, [device, action], (err) => {
+    if (err) {
+      console.error('Lỗi khi ghi lịch sử thiết bị:', err);
+      return res.status(500).json({ error: 'Lỗi khi ghi lịch sử thiết bị' });
+    } else {
+      res.status(200).send(`Đèn ${device} đã được ${action}`);
+      console.log(`Đèn ${device} đã được ${action}`);
+    }
+  });
+});
 app.listen(PORT, () => {
   console.log(`Server đang chạy tại http://localhost:${PORT}`);
 });
+
