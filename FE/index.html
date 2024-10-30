@@ -61,7 +61,7 @@
                             </div>
                             <div class="i3 item-3-3">
                                 <p class="den"><i class="fa-regular fa-lightbulb"></i></p>
-                                <input type="checkbox" class="switch" id="on-off-den">
+                                <input type="checkbox" class="switch" id="on-off-den" onchange="toggleLight()">
                             </div>
                         </div>
                     </div>
@@ -77,11 +77,12 @@
             <div>
                 <label for="searchField">Tìm kiếm theo: </label>
                 <select id="searchField">
-                    <option value="0">ID</option>
-                    <option value="1">Temperature</option>
-                    <option value="2">Humidity</option>
-                    <option value="3">Light</option>
-                    <option value="4">Time</option>
+                    <option value="id">ID</option>
+                    <option value="temperature">Temperature</option>
+                    <option value="humidity">Humidity</option>
+                    <option value="light">Light</option>
+                    <option value="timestamp">Time</option>
+                    <option value="all">All</option>
                 </select>
                 <input type="text" id="searchBox" placeholder="Nhập nội dung tìm kiếm" />
             </div>
@@ -116,11 +117,11 @@
             <div id="actionSearchContainer">
                 <label for="actionSearchField">Tìm kiếm theo:</label>
                 <select id="actionSearchField">
-                    <option value="0">ID</option>
-                    <option value="1">Device</option>
-                    <option value="2">Action</option>
-                    <option value="3">Time</option>
-
+                    <option value="id">ID</option>
+                    <option value="device">Device</option>
+                    <option value="action">Action</option>
+                    <option value="time">Time</option>
+                    <option value="all">All</option>
                 </select>
                 <input type="text" id="actionSearchBox" placeholder="Nhập nội dung tìm kiếm" />
             </div>
@@ -203,15 +204,15 @@
             try {
                 const response = await fetch('http://localhost:3000/sensor_data');
                 const data = await response.json();
+
                 if (data.length > 0) {
-                    // Hiển thị dữ liệu mới nhất
-                    const latestData = data[0]; // Lấy bản ghi mới nhất
+                    const latestData = data[0];
                     document.getElementById('temperature').innerText = latestData.temperature;
                     document.getElementById('humidity').innerText = latestData.humidity;
                     document.getElementById('light').innerText = latestData.light;
 
-                    // Gọi hàm để cập nhật biểu đồ nếu cần
-                    updateChart(latestData);
+                    // Nếu không cần updateChart, bỏ dòng này
+                    // updateChart(latestData); 
                 } else {
                     document.getElementById('temperature').innerText = 'No data';
                     document.getElementById('humidity').innerText = 'No data';
@@ -225,7 +226,7 @@
         setInterval(fetchSensorData, 3000);
         fetchSensorData();
         // Hàm để cập nhật biểu đồ (cần implement)
-        
+
 
 
         // Gọi hàm để lấy dữ liệu khi trang được tải
@@ -236,6 +237,7 @@
     <script src="chart.js"></script>
     <script src="sensor_data.js"></script>
     <script src="action_history.js"></script>
+    <script src="toggle_light.js"></script>
 </body>
 
 </html>
