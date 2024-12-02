@@ -1,0 +1,31 @@
+create database IOT;
+use IOT;
+
+CREATE TABLE sensor_data (
+    id INT AUTO_INCREMENT PRIMARY KEY, -- ID tự tăng
+    temperature FLOAT NOT NULL,       -- Cột nhiệt độ, kiểu số thực
+    humidity FLOAT NOT NULL,          -- Cột độ ẩm, kiểu số thực
+    light FLOAT NOT NULL,             -- Cột ánh sáng, kiểu số thực
+    timestamp DATETIME NOT NULL       -- Cột thời gian, kiểu DATETIME
+);
+
+ALTER TABLE sensor_data
+ADD COLUMN wind DECIMAL(5, 2) NULL;
+
+
+
+
+
+CREATE TABLE device_history (
+    id INT AUTO_INCREMENT PRIMARY KEY, -- ID tự tăng, là khóa chính
+    device VARCHAR(100) NOT NULL,      -- Tên thiết bị, kiểu chuỗi
+    action VARCHAR(50) NOT NULL,       -- Hành động (ON, OFF, v.v.), kiểu chuỗi
+    timestamp DATETIME NOT NULL        -- Thời gian thực hiện hành động, kiểu DATETIME
+);
+SET SQL_SAFE_UPDATES = 0;
+
+DELETE FROM device_history WHERE device = 'all_leds';
+
+
+select * from sensor_data;
+select * from device_history;
