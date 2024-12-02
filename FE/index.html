@@ -1,0 +1,297 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Responsive Dashboard</title>
+    <link rel="stylesheet" href="styles.css">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.6.0/css/all.min.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.13.1/css/jquery.dataTables.min.css">
+
+</head>
+
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar" id="sidebar">
+        <div class="logo">
+            <img src="./logo.jpg" alt="Logo" />
+        </div>
+        <ul class="menu">
+            <li><a href="#" onclick="openTab(event, 'dashboard')">Dashboard</a></li>
+            <li><a href="#" onclick="openTab(event, 'dashboard2')">Dashboard Wind</a></li>
+            <li><a href="#" onclick="openTab(event, 'sensor_data')">Sensor Data</a></li>
+            <li><a href="#" onclick="openTab(event, 'action_history')">Action History</a></li>
+            <li><a href="#" onclick="openTab(event, 'profile')">Profile</a></li>
+        </ul>
+    </div>
+
+    <!-- Main Content -->
+    <div class="content">
+
+        <!-- Dashboard Tab -->
+        <div id="dashboard" class="tab-content active">
+            <h2 class="text-primary">Dashboard</h2>
+            <p>This is the Dashboard tab.</p>
+            <div class="sensor_content">
+                <div class="nhietdo">Temperature <i class="fa-solid fa-temperature-three-quarters"></i>
+                    <p id="temperature">Loading...</p>
+                </div>
+                <div class="doam">Humidity <i class="fa-solid fa-droplet"></i>
+                    <p id="humidity">Loading...</p>
+                </div>
+                <div class="anhsang">Light <i class="fa-solid fa-sun"></i>
+                    <p id="light">Loading...</p>
+                </div>
+            </div>
+
+            <div class="table" id="Bang_dieu_khien">
+                <div class="item-1-wrapper">
+                    <div class="table-con">
+                        <div class="item-2">
+                            <canvas id="combinedChart"></canvas>
+                        </div>
+                        <div class="item-3">
+                            <div class="i3 item-3-1">
+                                <p class="den"><i class="fa-regular fa-lightbulb"></i></p>
+                                <input type="checkbox" class="switch" id="led1" onchange="toggleLight(1)">
+                            </div>
+                            <div class="i3 item-3-2">
+                                <p class="den"><i class="fa-regular fa-lightbulb"></i></p>
+                                <input type="checkbox" class="switch" id="led2" onchange="toggleLight(2)">
+                            </div>
+                            <div class="i3 item-3-3">
+                                <p class="den"><i class="fa-regular fa-lightbulb"></i></p>
+                                <input type="checkbox" class="switch" id="led3" onchange="toggleLight(3)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <div id="dashboard2" class="tab-content">
+            <h2 class="text-primary">Dashboard Wind</h2>
+            <p>This is the Dashboard tab.</p>
+            <div class="sensor_content">
+                <div class="doam">Wind Speed <i class="fa-solid fa-wind"></i>
+                    <p id="wind">Loading...</p>
+                </div>
+            </div>
+
+            <div class="table" id="Bang_dieu_khien">
+                <div class="item-1-wrapper">
+                    <div class="table-con">
+                        <div class="item-2">
+                            <canvas id="combinedChartWind"></canvas>
+                        </div>
+                        <div class="item-3">
+                            <div class="i3 item-3-4">
+                                <p class="den"><i class="fa-regular fa-lightbulb"></i></p>
+                                <input type="checkbox" class="switch" id="led4" onchange="toggleLight(4)">
+                            </div>
+                            <div class="i3 item-3-5">
+                                <p class="den"><i class="fa-regular fa-lightbulb"></i></p>
+                                <input type="checkbox" class="switch" id="led5" onchange="toggleLight(5)">
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+
+        <!-- Sensor Data Tab -->
+        <div id="sensor_data" class="tab-content">
+            <h2 class="text-primary">Sensor Data</h2>
+
+            <!-- Dropdown để chọn trường cần tìm kiếm -->
+            <div>
+                <label for="searchField">Tìm kiếm theo: </label>
+                <select id="searchField">
+                    <option value="id">ID</option>
+                    <option value="temperature">Temperature</option>
+                    <option value="humidity">Humidity</option>
+                    <option value="light">Light</option>
+                    <option value="wind">Wind</option>
+                    <option value="timestamp">Time</option>
+                    <option value="all">All</option>
+                </select>
+                <input type="text" id="searchBox" placeholder="Nhập nội dung tìm kiếm" />
+            </div>
+
+            <table id="sensorTable" class="display">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Nhiệt độ</th>
+                        <th>Độ ẩm</th>
+                        <th>Ánh sáng</th>
+                        <th>Tốc độ gió</th>
+                        <th>Thời gian</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dữ liệu sẽ được nạp ở đây -->
+                </tbody>
+            </table>
+
+            <!-- Điều hướng trang -->
+            <label for="gotoPage">Go to page:</label>
+            <input type="number" id="gotoPage" min="1" />
+            <button id="gotoButton">Go</button>
+        </div>
+
+
+
+        <!-- Action History Tab -->
+        <div id="action_history" class="tab-content">
+            <h2 class="text-primary">Action History</h2>
+
+            <div id="actionSearchContainer">
+                <label for="actionSearchField">Tìm kiếm theo:</label>
+                <select id="actionSearchField">
+                    <option value="id">ID</option>
+                    <option value="device">Device</option>
+                    <option value="action">Action</option>
+                    <option value="time">Time</option>
+                    <option value="all">All</option>
+                </select>
+                <input type="text" id="actionSearchBox" placeholder="Nhập nội dung tìm kiếm" />
+            </div>
+
+            <table id="actionTable" class="display">
+                <thead>
+                    <tr>
+                        <th>ID</th>
+                        <th>Device</th>
+                        <th>Action</th>
+                        <th>Time</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <!-- Dữ liệu sẽ được nạp ở đây -->
+                </tbody>
+            </table>
+
+            <div class="dataTables_wrapper">
+                <label for="gotoActionPage">Go to page:</label>
+                <input type="number" id="gotoActionPage" min="1" />
+                <button id="gotoActionButton">Go</button>
+            </div>
+        </div>
+
+        <!-- Profile Tab -->
+        <div id="profile" class="tab-content">
+            <div id="profile" class="profile-content">
+                <!-- Phần trái: Avatar và thông tin cá nhân -->
+                <div class="left-content">
+                    <div class="profile-avatar">
+                        <img src="./anhmeo.jpg" alt="Avatar" id="avatar" />
+                    </div>
+                    <div class="profile-info">
+                        <p><strong>Họ tên:</strong> Lê Xuân Mạnh</p>
+                        <p><strong>Mã sinh viên:</strong> B21DCAT125</p>
+                        <p><strong>Lớp:</strong> D21CQAT01-B</p>
+                        <p><strong>Github:</strong> <a href="https://github.com/yourgithubprofile"
+                                target="_blank">github.com/yourgithubprofile</a></p>
+                        <p><strong>API Documentation:</strong> <a href="https://apidoclink.com"
+                                target="_blank">apidoclink.com</a></p>
+                        <p><strong>PDF Báo cáo:</strong> <a href="your_report.pdf" target="_blank">Download Báo cáo</a>
+                        </p>
+                    </div>
+                </div>
+
+                <!-- Phần bản đồ vị trí bên phải -->
+                <div class="profile-map">
+                    <h3>Vị trí của bạn</h3>
+                    <iframe
+                        src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d3151.8354345092945!2d144.95592631568053!3d-37.8172097797517!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x6ad642af0f11fd81%3A0xf5772d5b24c4caff!2sMelbourne%20VIC%2C%20Australia!5e0!3m2!1sen!2s!4v1602562301006!5m2!1sen!2s"
+                        width="500" height="400" style="border:0;" allowfullscreen="" loading="lazy"
+                        referrerpolicy="no-referrer-when-downgrade">
+                    </iframe>
+                </div>
+            </div>
+        </div>
+
+
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script>
+        function openTab(event, tabName) {
+            // Ẩn tất cả các tab
+            const tabs = document.querySelectorAll('.tab-content');
+            tabs.forEach(tab => tab.classList.remove('active'));
+
+            // Loại bỏ class 'active' khỏi tất cả các link
+            const links = document.querySelectorAll('.menu a');
+            links.forEach(link => link.classList.remove('active'));
+
+            // Hiển thị tab được nhấn và thêm class 'active'
+            document.getElementById(tabName).classList.add('active');
+            event.currentTarget.classList.add('active');
+        }
+
+        // Hàm để lấy dữ liệu cảm biến từ API
+        async function fetchSensorData() {
+            try {
+                const response = await fetch('http://localhost:3000/sensor_data');
+                const data = await response.json();
+
+                if (data.length > 0) {
+                    const latestData = data[0];
+                    document.getElementById('temperature').innerText = latestData.temperature;
+                    document.getElementById('humidity').innerText = latestData.humidity;
+                    document.getElementById('light').innerText = latestData.light;
+                    document.getElementById('wind').innerText = latestData.wind;
+
+                    // Nếu không cần updateChart, bỏ dòng này
+                    // updateChart(latestData); 
+                } else {
+                    document.getElementById('temperature').innerText = 'No data';
+                    document.getElementById('humidity').innerText = 'No data';
+                    document.getElementById('light').innerText = 'No data';
+                    document.getElementById('wind').innerText = 'No data';
+                }
+            } catch (error) {
+                console.error('Error fetching sensor data:', error);
+            }
+        }
+
+        setInterval(fetchSensorData, 3000);
+        fetchSensorData();
+        // Hàm để cập nhật biểu đồ (cần implement)
+
+
+        function loadWindData() {
+            fetch('http://localhost:3000/api/wind') // Gửi yêu cầu đến server để lấy giá trị wind
+                .then(response => response.json()) // Chuyển đổi dữ liệu trả về thành JSON
+                .then(data => {
+                    // Cập nhật giá trị vào phần tử có id="wind"
+                    document.getElementById('wind').innerText = data.wind + ' km/h';
+                })
+                .catch(error => {
+                    // Xử lý lỗi nếu có
+                    console.error('Error fetching wind data:', error);
+                    document.getElementById('wind').innerText = 'Error loading data';
+                });
+        }
+
+        // Gọi hàm loadWindData ngay khi trang được tải
+        window.onload = function () {
+            loadWindData(); // Cập nhật giá trị gió ngay khi trang được tải
+            setInterval(loadWindData, 5000); // Gọi lại hàm loadWindData mỗi 5 giây
+            fetchSensorData();
+        };
+    
+    </script>
+    <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+    <script src="https://cdn.datatables.net/1.13.1/js/jquery.dataTables.min.js"></script>
+    <script src="chart.js"></script>
+    <script src="chart2.js"></script>
+    <script src="sensor_data.js"></script>
+    <script src="action_history.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,493 @@
+/* Reset some default styles */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+body {
+  display: flex; /* Bố trí flex ngang giữa sidebar và content */
+  height: 100vh; /* Đảm bảo chiều cao toàn màn hình */
+  font-family: Arial, sans-serif;
+  background-color: #f0f0f0;
+}
+
+/* Sidebar */
+.sidebar {
+  width: 300px;
+  background-color: #1a2036;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding: 10px;
+}
+
+.sidebar .logo {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  height: 200px;
+}
+
+.sidebar .logo img {
+  width: 100px;
+  object-fit: contain;
+}
+
+.menu {
+  list-style: none;
+  width: 100%;
+}
+
+.menu li {
+  margin-bottom: 15px;
+}
+
+.menu a {
+  display: block;
+  padding: 15px;
+  /* background: linear-gradient(to right, #1a2036 0%, #1a2036 100%); */
+  color: white;
+  text-align: center;
+  text-decoration: none;
+  border-radius: 5px;
+  opacity: 0.7;
+  transition: all 0.4s ease; /* Áp dụng hiệu ứng mờ */
+}
+
+.menu a:hover {
+  opacity: 1;/* Thay đổi độ mờ để tạo cảm giác chuyển tiếp */
+  background: linear-gradient(to right, #202f67 0%, #0b1433 100%);
+  transform: scale(1.05);
+}
+
+/* Content */
+.content {
+  flex: 1; /* Phần còn lại của màn hình */
+  padding: 20px;
+  /* overflow-y: auto; */
+  margin-top: 10px;
+  flex-direction: column;
+  display: flex;
+}
+
+.sensor_content {
+  display: flex;
+  justify-content: space-around;
+  margin-bottom: 20px;
+  margin-top: 10px;
+}
+
+.sensor_content div {
+  width: 30%;
+  text-align: center;
+  padding: 10px;
+  color: black;
+  font-size: 18px;
+  border-radius: 10px;
+}
+
+.nhietdo {
+  background-color: yellow;
+}
+
+.doam {
+  background-color: cyan;
+}
+
+.anhsang {
+  background-color: red;
+  color: white;
+}
+
+/* Table section */
+.table {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  background-color: white;
+  padding: 20px 20px 0;
+  border-radius: 10px;
+  gap: 10px;
+  flex: 1;
+  /* height: calc(100% - 50px); */
+}
+
+.table-con {
+  display: flex;
+}
+
+.item-1-wrapper {
+  width: 100%;
+}
+
+.item-2 {
+  flex: 5;
+}
+
+.item-2 canvas {
+  width: 70%; /* Đảm bảo canvas chiếm toàn bộ chiều rộng */
+  height: 650px; /* Đặt chiều cao biểu đồ */
+}
+
+#combinedChartWind {
+  width: 100% !important;  /* Chiều rộng biểu đồ chiếm 70% của phần tử chứa */
+  height: 500px !important; /* Chiều cao biểu đồ là 650px */
+  margin: 0 auto; /* Căn giữa biểu đồ trong phần tử chứa */
+}
+
+
+.item-3 {
+  display: flex;
+  flex-direction: column;
+  gap: 15px;
+  flex: 1;
+  margin-left: 20px;
+  width: 100%;
+  margin-top: 50px;
+}
+
+/* Control switches */
+.i3 {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #d2a679;
+  padding: 15px 20px;
+  border-radius: 10px;
+  font-size: 20px;
+  width: 100%;
+  height: 90px;
+}
+
+.i3 p {
+  margin-left: 7px;
+  font-size: 28px;
+}
+
+.switch {
+  width: 50px;
+  height: 30px;
+  position: relative;
+  appearance: none;
+  background: #ccc;
+  border-radius: 20px;
+  outline: none;
+  cursor: pointer;
+  transition: background 0.3s;
+  transition-delay: 5s;
+}
+
+.switch:checked {
+  background: red;
+}
+
+.switch::before {
+  content: "";
+  width: 26px;
+  height: 25px;
+  background: white;
+  border-radius: 50%;
+  position: absolute;
+  top: 2.5px;
+  left: 2px;
+  transition: 0.3s;
+  transition-delay: 5s;
+}
+
+.switch:checked::before {
+  transform: translateX(20px);
+  
+}
+
+.den i {
+  transition: color 0.3s ease-in-out;
+  transition-delay: 5s; /* Độ trễ 5 giây cho biểu tượng đèn */
+}
+
+.switch:checked ~ .den i {
+  color: yellow; /* Màu đèn khi bật */
+}
+
+.tab-content {
+  display: none;
+}
+
+
+.tab-content.active {
+  display: block;
+}
+
+#sensorTable {
+  width: 100%; /* Đảm bảo bảng chiếm toàn bộ chiều rộng của container */
+  max-width: 1200px; /* Đặt chiều rộng tối đa để bảng không quá rộng */
+  min-width: 800px; /* Đặt chiều rộng tối thiểu để bảng không quá nhỏ */
+  margin: 20px auto; /* Canh giữa bảng và thêm khoảng cách trên/dưới */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+h2 {
+  margin-bottom: 20px; /* Thêm khoảng cách dưới tiêu đề */
+  margin-top: 5px;
+}
+
+/* Điều chỉnh lại các tiêu đề bảng */
+#sensorTable thead th {
+  background-color: #f9fafb; /* Màu nền sáng cho tiêu đề */
+  color: #333;
+  text-align: left;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+/* Các dòng dữ liệu */
+#sensorTable tbody td {
+  padding: 12px 20px;
+  font-size: 14px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Hover hiệu ứng trên các dòng */
+#sensorTable tbody tr:hover td {
+  background-color: #f1f1f1;
+}
+
+/* Kiểm tra nếu vẫn có lỗi width=-1px */
+table {
+  width: 100% !important; /* Đảm bảo bảng chiếm toàn bộ chiều rộng */
+}
+
+
+#gotoPage {
+  margin-top: 10px;
+  font-size: 16px;
+  padding: 5px;
+  width: 60px;
+  text-align: center;
+}
+
+#gotoButton {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
+.dataTables_paginate {
+  float: right; /* Đưa phần phân trang sang phải */
+}
+
+/* Di chuyển thông tin số lượng entries sang bên trái */
+.dataTables_info {
+  float: left; /* Đưa phần thông tin "Showing 1 to 10..." sang trái */
+}
+
+#searchField, #searchBox {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+#searchBox {
+  width: 250px;
+  margin-left: 10px;
+}
+
+.custom-search {
+  display: flex;
+  justify-content: flex-end; /* Canh phải */
+  align-items: center;
+  margin-bottom: 20px;
+}
+#sensor_data {
+  margin: 0px 20px;
+  padding: 0 15px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#sensor_data h2 {
+  text-align: left;
+  color: #007bff;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+
+/* Action history */
+#actionTable {
+  width: 100%; /* Đảm bảo bảng chiếm toàn bộ chiều rộng của container */
+  max-width: 1200px; /* Đặt chiều rộng tối đa để bảng không quá rộng */
+  min-width: 800px; /* Đặt chiều rộng tối thiểu để bảng không quá nhỏ */
+  margin: 20px auto; /* Canh giữa bảng và thêm khoảng cách trên/dưới */
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  background-color: #f9f9f9;
+}
+
+#action_history h2 {
+  margin-bottom: 20px; /* Thêm khoảng cách dưới tiêu đề */
+  margin-top: 5px;
+}
+
+/* Điều chỉnh lại các tiêu đề bảng */
+#actionTable thead th {
+  background-color: #f9fafb; /* Màu nền sáng cho tiêu đề */
+  color: #333;
+  text-align: left;
+  padding: 12px 20px;
+  font-size: 14px;
+  font-weight: bold;
+  border-bottom: 2px solid #e0e0e0;
+}
+
+/* Các dòng dữ liệu */
+#actionTable tbody td {
+  padding: 12px 20px;
+  font-size: 14px;
+  border-top: 1px solid #e0e0e0;
+}
+
+/* Hover hiệu ứng trên các dòng */
+#actionTable tbody tr:hover td {
+  background-color: #f1f1f1;
+}
+
+/* Kiểm tra nếu vẫn có lỗi width=-1px */
+table {
+  width: 100% !important; /* Đảm bảo bảng chiếm toàn bộ chiều rộng */
+}
+
+#gotoActionPage {
+  margin-top: 10px;
+  font-size: 16px;
+  padding: 5px;
+  width: 60px;
+  text-align: center;
+}
+
+#gotoActionButton {
+  margin-top: 10px;
+  padding: 5px 10px;
+  font-size: 16px;
+}
+
+.dataTables_paginate {
+  float: right; /* Đưa phần phân trang sang phải */
+}
+
+/* Di chuyển thông tin số lượng entries sang bên trái */
+.dataTables_info {
+  float: left; /* Đưa phần thông tin "Showing 1 to 10..." sang trái */
+}
+
+#actionSearchField, #actionSearchBox {
+  padding: 8px;
+  border-radius: 4px;
+  border: 1px solid #ccc;
+  font-size: 14px;
+}
+
+#actionSearchBox {
+  width: 250px;
+  margin-left: 10px;
+}
+
+.custom-search {
+  display: flex;
+  justify-content: flex-end; /* Canh phải */
+  align-items: center;
+  margin-bottom: 20px;
+}
+
+#action_history {
+  margin: 0px 20px;
+  padding: 0 15px;
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+#action_history h2 {
+  text-align: left;
+  color: #007bff;
+  font-size: 24px;
+  margin-bottom: 20px;
+}
+
+
+/* Profile */
+/* Container chính chứa nội dung */
+/* Container chính chứa profile */
+.profile-content {
+  display: flex;
+  justify-content: space-between; /* Căn giữa khoảng cách giữa 2 phần */
+  align-items: center; /* Căn giữa theo chiều dọc */
+  height: calc(100vh - 100px); /* Đặt chiều cao dựa trên viewport trừ đi phần khác của trang (để không bị quá dài) */
+  background-color: #f9f9f9;
+  border-radius: 10px;
+  padding: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+  margin: auto; /* Căn giữa theo chiều ngang */
+}
+
+/* Căn chỉnh nội dung bên trong */
+.left-content {
+  display: flex;
+  flex-direction: column;
+  justify-content: center; /* Căn giữa nội dung bên trong theo chiều dọc */
+  align-items: center; /* Căn giữa theo chiều ngang */
+  text-align: left;
+  width: 40%; /* Chiều rộng của phần thông tin */
+  padding: 20px;
+}
+
+.profile-avatar img {
+  width: 150px;
+  height: 150px;
+  border-radius: 50%;
+  object-fit: cover;
+  margin-bottom: 20px;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.2);
+}
+
+.profile-info {
+  font-size: 16px;
+  line-height: 1.5;
+  width: 100%;
+  text-align: center;
+}
+
+.profile-info p {
+  margin: 10px 0;
+}
+
+/* Phần bản đồ bên phải */
+.profile-map {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  width: 50%; /* Chiều rộng của phần bản đồ */
+  height: 100%; /* Chiều cao của bản đồ bằng chiều cao của khung */
+}
+
+.profile-map iframe {
+  width: 100%;
+  height: 100%;
+  border-radius: 8px;
+  border: none;
+  box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+}
+
+.profile-map h3 {
+  color: #007bff;
+  margin-bottom: 10px;
+  font-size: 20px;
+  font-weight: bold;
+}
